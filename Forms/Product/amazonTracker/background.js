@@ -7,13 +7,10 @@ chrome.runtime.onInstalled.addListener(function() {
 	console.log(' background.js loaded');
 	
 	// test save urls
-	chrome.storage.local.set({"AmazonURLS": {"PIZZAPIE":45, "Stupid": "No"}});
+	chrome.storage.local.set({"AmazonURLS": {}});
 
-	testSave({"wowza":"112.19"});
+	saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
 
-	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
-		console.log(data.AmazonURLS);
-	});
 	
 	//reset badge text
 	chrome.browserAction.setBadgeText({text: ""});
@@ -21,7 +18,7 @@ chrome.runtime.onInstalled.addListener(function() {
 	// test scrape amazon page
 	
 	//scrapePage("https://www.amazon.com/dp/B07GHB4KG6/ref=sxts_kp_bs_tr_lp_1?pf_rd_m=ATVPDKIKX0DER&pf_rd_p=8778bc68-27e7-403f-8460-de48b6e788fb&pd_rd_wg=yX6Y2&pf_rd_r=J2X9QVBGM4D2ZNK6XC99&pf_rd_s=desktop-sx-top-slot&pf_rd_t=301&pd_rd_i=B07GHB4KG6&pd_rd_w=6thB7&pf_rd_i=ak47&pd_rd_r=ac861a9a-c37c-4114-86c6-c132fc650836&ie=UTF8&qid=1540483753&sr=1")
-
+	scrapePage("https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C");
 	
 	
 });
@@ -42,8 +39,14 @@ function scrapePage(url){
 				
 				// For book listings there are multiple prices.
 				//price = htmlDoc.getElementsByClassName('a-size-base a-color-price a-color-price')[0].innerHTML;
-				
-				let price = htmlDoc.getElementById('priceblock_ourprice').innerHTML;
+				let price = ""
+				try {
+					price = htmlDoc.getElementById('priceblock_ourprice').innerHTML;
+				}
+				catch(err) {
+					price = htmlDoc.getElementById('priceblock_dealprice').innerHTML;
+				}
+
 				console.log(price);
 	
 				// DO SOMETHING WITH THAT GIVEN PRICE HERE
@@ -60,7 +63,7 @@ function scrapePage(url){
 
 
 // example amazon urls for testing purposes
-function testSave(test){
+function saveNew(test){
 	// {"urlhere": "18.95"}
 	// only one at a time for now
 
@@ -72,16 +75,13 @@ function testSave(test){
 
 		if(!Object.keys(data.AmazonURLS).includes(Object.keys(test))){
 			for(var key in test){
-				console.log('SAVING ' + test);
 				let value = test[key];
 				
 				let newData = data.AmazonURLS;
-				
+			
 				// add the new value to data
-				newData.key = value;
-
+				newData[key] = value;
 				chrome.storage.local.set({"AmazonURLS": newData});
-
 			}
 		}
 		/*
@@ -97,6 +97,9 @@ function testSave(test){
 			}
 		}
 		*/
+		chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+			console.log(data.AmazonURLS);
+		});
 		
 
 	});
