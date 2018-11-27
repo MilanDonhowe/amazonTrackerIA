@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(function() {
 	console.log(' background.js loaded');
 	
 	// test save urls
-	chrome.storage.local.set({"AmazonURLS": {}});
+	chrome.storage.local.set({"AmazonURLS": {"test":"4.43"}});
 
 	saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
 
@@ -19,6 +19,7 @@ chrome.runtime.onInstalled.addListener(function() {
 	
 	//scrapePage("https://www.amazon.com/dp/B07GHB4KG6/ref=sxts_kp_bs_tr_lp_1?pf_rd_m=ATVPDKIKX0DER&pf_rd_p=8778bc68-27e7-403f-8460-de48b6e788fb&pd_rd_wg=yX6Y2&pf_rd_r=J2X9QVBGM4D2ZNK6XC99&pf_rd_s=desktop-sx-top-slot&pf_rd_t=301&pd_rd_i=B07GHB4KG6&pd_rd_w=6thB7&pf_rd_i=ak47&pd_rd_r=ac861a9a-c37c-4114-86c6-c132fc650836&ie=UTF8&qid=1540483753&sr=1")
 	scrapePage("https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C");
+	
 	
 	
 });
@@ -46,10 +47,14 @@ function scrapePage(url){
 				catch(err) {
 					price = htmlDoc.getElementById('priceblock_dealprice').innerHTML;
 				}
+				
+				//remove any dollar signs ($) that may mess with parsing the string to a float.
+				let formatPrice = price.replace("$", "");
 
-				console.log(price);
-	
-				// DO SOMETHING WITH THAT GIVEN PRICE HERE
+				console.log(formatPrice);
+				
+				// save new price.
+				saveNew({[url]:formatPrice});
 				
 
 				//console.log(price.trim());
@@ -72,7 +77,7 @@ function saveNew(test){
 		// prevent duplication
 		//!data.AmazonURLS.includes(test)
 
-
+		// save unique urls
 		if(!Object.keys(data.AmazonURLS).includes(Object.keys(test))){
 			for(var key in test){
 				let value = test[key];
@@ -84,32 +89,50 @@ function saveNew(test){
 				chrome.storage.local.set({"AmazonURLS": newData});
 			}
 		}
-		/*
-		for (let i = 0; i < Object.keys(data.AmazonURLS).length; i++){
-			if (!Object.keys(data.AmazonURLS[i]).includes(Object.keys(test))){
-			
-				// create new array to overwrite existing 
-				let newUrls = data.AmazonURLS;
-
-				// add unique url
-				newUrls.push(test);
-				chrome.storage.local.set({"AmazonURLS":newUrls});
-			}
-		}
-		*/
+		// check that save worked
 		chrome.storage.local.get({"AmazonURLS": {}}, function(data){
 			console.log(data.AmazonURLS);
 		});
 		
+		// comparePrice test
+		comparePrice("test", "6.04");
 
 	});
 }
 
-// compares old amazon price with the new amazon price.
+// compares old amazon price with the new amazon price and then saves new price if it is lower.
 function comparePrice(url, newPrice){
 
 	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
-		
+		// check if there is a saved price for that url
+		if(Object.keys(data.AmazonURLS).includes(url)){
+
+			// make saved price a float
+			let oldPrice = data.AmazonURLS[url];
+			console.log(oldPrice);
+			if(newPrice < oldPrice){
+				
+				//update new price
+				let newData = data.AmazonURLS;
+				newData[url] = newPrice;
+
+				//notification of new deal
+				chrome.browserAction.setBadgeText({text: "!"});
+
+				chrome.storage.local.set({ "AmazonURLS": newData });
+				
+				// Tell popup.html about this great new deal!
+				//magic here
+
+
+			} else {
+				console.log("no price change for " + url);
+			}
+
+
+		} else {
+			console.log("There is no saved history of tracking " + url);
+		}
 	});
 
 }
