@@ -50,7 +50,7 @@ function scrapePage(url){
 				console.log(price);
 	
 				// DO SOMETHING WITH THAT GIVEN PRICE HERE
-
+				
 
 				//console.log(price.trim());
 				//console.log(htmlDoc.getElementsByClassName('gravatar-wrapper-32')[0].getElementsByTagName('img')[0].src);
@@ -105,6 +105,14 @@ function saveNew(test){
 	});
 }
 
+// compares old amazon price with the new amazon price.
+function comparePrice(url, newPrice){
+
+	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+		
+	});
+
+}
 
 
 
