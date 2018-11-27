@@ -88,7 +88,12 @@ function saveNew(test){
 				newData[key] = value;
 				chrome.storage.local.set({"AmazonURLS": newData});
 			}
+		} else {
+			console.log("URL already stored.");
 		}
+
+
+
 		// check that save worked
 		chrome.storage.local.get({"AmazonURLS": {}}, function(data){
 			console.log(data.AmazonURLS);
