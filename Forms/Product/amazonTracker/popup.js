@@ -33,6 +33,11 @@ let savePage = () => {
     port.onMessage.addListener(function(msg){
         console.log("Message recieved:" + msg);
         tabURL = msg;
+        switch(msg){
+            case "NONAMAZON":
+                console.log("ERROR: Page not amazon.");
+                break;
+        }
         
     });
 
