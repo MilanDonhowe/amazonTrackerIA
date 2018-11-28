@@ -78,9 +78,21 @@ function saveNew(test){
 		console.log(Object.keys(data.AmazonURLS));
 		// prevent duplication
 		//!data.AmazonURLS.includes(test)
-
+		console.log(Object.keys(test)[0]);
 		// save unique urls
-		if(!Object.keys(test) in data.AmazonURLS){
+		if(Object.keys(test)[0] in data.AmazonURLS){
+			
+			console.log("URL already stored.");
+			for (let key in test){
+				let tempPrice = test[key];
+				console.log("Temp price is " + tempPrice);
+				let tempUrl = key;
+				console.log("Temp url is " + tempUrl);
+				comparePrice(tempUrl, tempPrice);
+			}
+
+		} else {
+		
 			for(var key in test){
 				let value = test[key];
 				
@@ -90,15 +102,6 @@ function saveNew(test){
 				newData[key] = value;
 				chrome.storage.local.set({"AmazonURLS": newData});
 				
-			}
-		} else {
-			console.log("URL already stored.");
-			for (let key in test){
-				let tempPrice = test[key];
-				console.log("Temp price is " + tempPrice);
-				let tempUrl = key;
-				console.log("Temp url is " + tempUrl);
-				comparePrice(tempUrl, tempPrice);
 			}
 		}
 
@@ -197,17 +200,19 @@ chrome.extension.onConnect.addListener(function(port){
 			chrome.tabs.query({lastFocusedWindow: true, active: true}, function(tabs){
 				console.log(tabs[0].url);
 				tabURL = tabs[0].url;
+				
+				// do stuff with this new data
+				if (tabURL.startsWith("https://www.amazon.com/")){
+					console.log("It is a go bois");
+					scrapePage(tabURL);
+				} else {
+					console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
+					// return err msg;
+					port.postMessage("NONAMAZON");
+				}
 			});
 
-			// do stuff with this new data
-			if (tabURL.startsWith("https://www.amazon.com/")){
-				console.log("It is a go bois");
-				scrapePage(tabURL);
-			} else {
-				console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
-				// return err msg;
-				port.postMessage("NONAMAZON");
-			}
+			
 			
 
 
