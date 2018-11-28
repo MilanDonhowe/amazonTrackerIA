@@ -5,22 +5,24 @@ let notifications = 0;
 chrome.runtime.onInstalled.addListener(function() {
 
 	console.log(' background.js loaded');
-	
 	// test save urls
-	chrome.storage.local.set({"AmazonURLS": {"test":"4.43"}});
+	/*
+	chrome.storage.local.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
+		loadUrls();
+	});
+	*/
 
-	saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
+	//saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
 
-	
+	//saveNew({"test":"34.2"})
 	//reset badge text
 	chrome.browserAction.setBadgeText({text: ""});
 
 	// test scrape amazon page
 	
 	//scrapePage("https://www.amazon.com/dp/B07GHB4KG6/ref=sxts_kp_bs_tr_lp_1?pf_rd_m=ATVPDKIKX0DER&pf_rd_p=8778bc68-27e7-403f-8460-de48b6e788fb&pd_rd_wg=yX6Y2&pf_rd_r=J2X9QVBGM4D2ZNK6XC99&pf_rd_s=desktop-sx-top-slot&pf_rd_t=301&pd_rd_i=B07GHB4KG6&pd_rd_w=6thB7&pf_rd_i=ak47&pd_rd_r=ac861a9a-c37c-4114-86c6-c132fc650836&ie=UTF8&qid=1540483753&sr=1")
-	scrapePage("https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C");
-	
-	
+	//scrapePage("https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C");
+
 	
 });
 // Notes:
@@ -78,7 +80,7 @@ function saveNew(test){
 		//!data.AmazonURLS.includes(test)
 
 		// save unique urls
-		if(!Object.keys(data.AmazonURLS).includes(Object.keys(test))){
+		if(!Object.keys(test) in data.AmazonURLS){
 			for(var key in test){
 				let value = test[key];
 				
@@ -87,20 +89,25 @@ function saveNew(test){
 				// add the new value to data
 				newData[key] = value;
 				chrome.storage.local.set({"AmazonURLS": newData});
+				
 			}
 		} else {
 			console.log("URL already stored.");
+			for (let key in test){
+				let tempPrice = test[key];
+				console.log("Temp price is " + tempPrice);
+				let tempUrl = key;
+				console.log("Temp url is " + tempUrl);
+				comparePrice(tempUrl, tempPrice);
+			}
 		}
 
 
 
-		// check that save worked
-		chrome.storage.local.get({"AmazonURLS": {}}, function(data){
-			console.log(data.AmazonURLS);
-		});
+		
 		
 		// comparePrice test
-		comparePrice("test", "6.04");
+		//comparePrice("test", "6.04");
 
 	});
 }
@@ -110,11 +117,13 @@ function comparePrice(url, newPrice){
 
 	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
 		// check if there is a saved price for that url
-		if(Object.keys(data.AmazonURLS).includes(url)){
-
+		//if(Object.keys(data.AmazonURLS).includes(url)){
+		//console.log("This is " + url);
+		//console.log("This is " + data.AmazonURLS[url]);
+		if (url in data.AmazonURLS){
 			// make saved price a float
 			let oldPrice = data.AmazonURLS[url];
-			console.log(oldPrice);
+			console.log("The old price is " + oldPrice);
 			if(newPrice < oldPrice){
 				
 				//update new price
@@ -128,10 +137,18 @@ function comparePrice(url, newPrice){
 				
 				// Tell popup.html about this great new deal!
 				//magic here
-
+				
+				// check that save worked
+				chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+					console.log(data.AmazonURLS);
+				});
+				
+				
 
 			} else {
 				console.log("no price change for " + url);
+				//TESTING
+				//loadUrls();
 			}
 
 
@@ -148,19 +165,54 @@ function comparePrice(url, newPrice){
 
 
 // Load saved urls
-/*
+
 function loadUrls(){
 	chrome.storage.local.get({"AmazonURLS": []}, function(data){
-		console.log(data.AmazonURLS.length);
-		
+		let keyLength = Object.keys(data.AmazonURLS).length;
+		console.log(data.AmazonURLS);
 		// loop through array
-		for(let index = 0; index < data.AmazonURLS.length; index++){
-			console.log(data.AmazonURLS[index]);
+		for(let key in data.AmazonURLS){
+			// check price for each url
+			scrapePage(key);
 		}
 
 	})
 }
-*/
+
+
+
+
+// GET THAT GOOD URL EYYY
+chrome.extension.onConnect.addListener(function(port){
+	console.log("CONNECTED TO MAIN FRAME.  EPIC CODE NOW PROCESSING.");
+
+	port.onMessage.addListener(function(msg){
+		if (msg == "TABURL"){
+
+			// why do I do this .___.
+
+			chrome.tabs.query({lastFocusedWindow: true, active: true}, function(tabs){
+				console.log(tabs[0].url);
+			});
+
+
+
+		}
+	});
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
 // ATTEMPT to get url of a given tab.  Duplication issue
 
 /*

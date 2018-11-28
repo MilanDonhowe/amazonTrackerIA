@@ -3,8 +3,8 @@
 window.onload = function(){
 
     // attach functions to buttons on HTML
-    loadListen = document.getElementById("load").addEventListener('click', loadUrls);
-    saveListen = document.getElementById("save").addEventListener('click', savePage);
+    var loadListen = document.getElementById("load").addEventListener('click', loadUrls);
+    var saveListen = document.getElementById("save").addEventListener('click', savePage);
        
 
 }
@@ -18,4 +18,23 @@ let loadUrls = () => {
 let savePage = () => {
     // get the current page, check if amazon product and if price is extractable.
     console.log("savePage called");
+    
+    let tabURL = "loading...";
+
+    // ask background.js to do the heavily lifting
+
+    let port = chrome.extension.connect({
+        name: "Get Current Tab URL"
+    });
+
+
+
+    port.postMessage("TABURL");
+    port.onMessage.addListener(function(msg){
+        console.log("Message recieved:" + msg);
+        tabURL = msg;
+        
+    });
+
+
 }
