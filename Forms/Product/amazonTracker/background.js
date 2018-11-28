@@ -191,9 +191,21 @@ chrome.extension.onConnect.addListener(function(port){
 
 			// why do I do this .___.
 
+			// initialize variable to hold the url in this context
+			let tabURL = "";
+
 			chrome.tabs.query({lastFocusedWindow: true, active: true}, function(tabs){
 				console.log(tabs[0].url);
+				tabURL = tabs[0].url;
 			});
+
+			// do stuff with this new data
+			if (tabURL.startsWith("https://www.amazon.com/")){
+				console.log("It is a go bois");
+			} else {
+				console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
+			}
+			
 
 
 
