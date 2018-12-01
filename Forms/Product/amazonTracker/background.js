@@ -2,6 +2,7 @@
 
 let notifications = 0;
 
+// run code on install/reload
 chrome.runtime.onInstalled.addListener(function() {
 
 	console.log(' background.js loaded');
@@ -25,6 +26,16 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	
 });
+
+// run code on extension startup
+chrome.runtime.onStartup.addListener(function(){
+	console.log('running on start up');
+	loadUrls();
+});
+
+
+
+
 // Notes:
 // the id priceblock_ourprice outputs the main price of a page.  However this seems to vary for book listings which have multiple purchase options.  Maybe figure out how to test difference or just ignore books?
 
@@ -221,7 +232,6 @@ chrome.extension.onConnect.addListener(function(port){
 	});
 
 });
-
 
 
 
