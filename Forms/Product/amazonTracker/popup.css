@@ -1,0 +1,48 @@
+/* popup.html style sheet */
+
+
+* {
+    font-family: 'Roboto', sans-serif;
+    font-size:130%;
+    text-align:center;
+    color:black;
+    background-color: #ffffff;
+    padding:0;
+    margin:0;
+    width:180px;
+}
+
+.btn{
+    border: 0px;
+    border-top:0px black dashed;
+    border-bottom:0px black dashed;
+    margin-top:10px;
+    width:100%;
+    background-color:rgba(244, 188, 66, 0.8);
+    color:#a07518;
+    text-align:left;
+}
+.btn:hover{
+    background: #e8c476;
+}
+
+h2{
+    border-top:0px black dashed;
+    padding:2px;
+    margin-top:20px;
+    font-size:10px;
+    /*background-color:#e5e1d7;*/
+}
+
+h6 {
+    font-size:9px;
+}
+
+td{
+    font-size:9px;
+    border:1px black solid;
+}
+
+a {
+    font-size:inherit;
+}
