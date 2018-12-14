@@ -183,7 +183,7 @@ function comparePrice(url, newPrice){
 function loadUrls(){
 	chrome.storage.local.get({"AmazonURLS": []}, function(data){
 		let keyLength = Object.keys(data.AmazonURLS).length;
-		console.log(data.AmazonURLS);
+		console.log(data.AmazonURLS); 
 		// loop through array
 		for(let key in data.AmazonURLS){
 			// check price for each url

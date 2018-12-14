@@ -1,17 +1,36 @@
-/* popup.html style sheet */
+/*
+==============================
+= Amazon Tracker Style Sheet =
+==============================
+====== By Milan Donhowe ======
+==============================
+*/
 
+
+
+/*
+====================
+= Page-Wide Styles =
+====================
+*/
 
 * {
     font-family: 'Roboto', sans-serif;
     font-size:130%;
     text-align:center;
-    color:black;
-    background-color: #ffffff;
+    font-weight: bold;
+    color:#a07518;
+    background-color: hsl(61, 100%, 50%);
     padding:0;
     margin:0;
+    /*was 180px*/
     width:180px;
 }
-
+/*
+=================
+= Button Styles =
+=================
+*/
 .btn{
     border: 0px;
     border-top:0px black dashed;
@@ -26,6 +45,16 @@
     background: #e8c476;
 }
 
+/*
+=====================
+= Header Tag Styles =
+=====================
+*/
+
+h1 {
+    background-color:hsl(59, 100%, 50%);
+}
+
 h2{
     border-top:0px black dashed;
     padding:2px;
@@ -38,6 +67,16 @@ h6 {
     font-size:9px;
 }
 
+
+
+/*
+================
+= Table Styles =
+================
+*/
+
+
+/*NOTE TABLE styles are mostly controlled by inline stylesheet for products.html*/
 td{
     font-size:9px;
     border:1px black solid;
