@@ -209,18 +209,21 @@ chrome.extension.onConnect.addListener(function(port){
 			let tabURL = "";
 
 			chrome.tabs.query({lastFocusedWindow: true, active: true}, function(tabs){
-				console.log(tabs[0].url);
-				tabURL = tabs[0].url;
+				// test if url can be retrieved
+				if(tabs[0].url != undefined){
+					console.log(tabs[0].url);
+					tabURL = tabs[0].url;
 				
-				// do stuff with this new data
-				if (tabURL.startsWith("https://www.amazon.com/")){
-					console.log("It is a go bois");
-					scrapePage(tabURL);
-				} else {
-					console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
-					// return err msg;
-					port.postMessage("NONAMAZON");
-				}
+					// do stuff with this new data
+					if (tabURL.startsWith("https://www.amazon.com/")){
+						console.log("It is a go bois");
+						scrapePage(tabURL);
+					} else {
+						console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
+						// return err msg;
+						port.postMessage("NONAMAZON");
+					}
+				}	
 			});
 
 			

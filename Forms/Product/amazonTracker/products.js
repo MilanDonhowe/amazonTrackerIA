@@ -4,7 +4,9 @@ window.onload = function(){
     //var table = Document.createElement('p');
 
     chrome.storage.local.get({"AmazonURLS": []}, function(data){
+        
         for ( let i in Object.keys(data.AmazonURLS) ){
+        
             let url = Object.keys(data.AmazonURLS)[i];
             let price = data.AmazonURLS[Object.keys(data.AmazonURLS)[i]];
             
@@ -13,27 +15,51 @@ window.onload = function(){
             var findName = /(?<=www.amazon.com\/)\w*/
 
             let name = url.match(findName);
-            //console.log(name[0]);
             let newHTML = "<tbody> " + "<tr><td><a href=" + url + " target='_blank'>" + String(name) + "</a></td>" + "<td>" + String(price) + "</td><td class='del'>X</td></tr></tbody>";
             let listing = document.getElementById('table').innerHTML += newHTML;
 
-            //listing.addEventListener('onclick', function(){
-            //    chrome.tabs.create(url);
-            //});
-
-            //console.log(newHTML);        
         }
 
-        //add event listeners to delete them! :D
 
-        // TO-DO: Add functionality so the user can delete listings.
+        //add event listeners to delete them!
+
 
         let listRows = document.getElementsByClassName('del');
-        for (let entry; entry < listRows.length; entry++){
-            console.log(entry);
-            //document.getElementsByClassName('del')[entry].addEventListener('click', function(){
-            //    console.log('clicked!');
-            //});
+        let entry = 0
+
+        while (entry < listRows.length){
+            // test if entry is numerical
+            if (typeof(entry) == typeof(3)){
+                arg = listRows[entry];
+                listRows[entry].addEventListener('click', function(arg){
+
+                    // get the url 
+                    let tURL = arg.srcElement.parentNode.firstChild.lastChild.href;
+                    // remove from storage with url name
+                    
+                    
+                    chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+                        
+
+                        //console.log(Object.keys(data.AmazonURLS));
+
+                        for (var key in Object.keys(data.AmazonURLS)){
+                            if (tURL == Object.keys(data.AmazonURLS)[key]){
+                                delete data.AmazonURLS[tURL];
+                            }
+                        }
+
+                        let newData = data.AmazonURLS;
+                        chrome.storage.local.set({"AmazonURLS":newData});
+
+                    });
+
+
+                    // delete HTML
+                    arg.srcElement.parentElement.innerHTML = '';
+                });
+            }
+            entry += 1;
         }
         
 
@@ -41,3 +67,4 @@ window.onload = function(){
     });
 
 }
+
