@@ -6,12 +6,14 @@ let notifications = 0;
 chrome.runtime.onInstalled.addListener(function() {
 
 	console.log(' background.js loaded');
+
+
 	// test save urls
-	/*
+	
 	chrome.storage.local.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
 		loadUrls();
 	});
-	*/
+	
 
 	//saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
 
@@ -86,10 +88,11 @@ function saveNew(test){
 	// only one at a time for now
 
 	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+		
 		console.log(Object.keys(data.AmazonURLS));
-		// prevent duplication
-		//!data.AmazonURLS.includes(test)
+
 		console.log(Object.keys(test)[0]);
+
 		// save unique urls
 		if(Object.keys(test)[0] in data.AmazonURLS){
 			
@@ -130,10 +133,12 @@ function saveNew(test){
 function comparePrice(url, newPrice){
 
 	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+
 		// check if there is a saved price for that url
 		//if(Object.keys(data.AmazonURLS).includes(url)){
 		//console.log("This is " + url);
 		//console.log("This is " + data.AmazonURLS[url]);
+		
 		if (url in data.AmazonURLS){
 			// make saved price a float
 			let oldPrice = data.AmazonURLS[url];
@@ -145,9 +150,17 @@ function comparePrice(url, newPrice){
 				newData[url] = newPrice;
 
 				//notification of new deal
-				chrome.browserAction.setBadgeText({text: "!"});
+				//chrome.browserAction.setBadgeText({text: "!"});
+				//alert('price change friendo');
 
-				chrome.storage.local.set({ "AmazonURLS": newData });
+				// fun stuff
+				
+				let notify = confirm("There has been a new deal detected!  Price drop from " + oldPrice + " to " + newPrice + ".  Do you want to view product?");
+				if (notify == true){
+					chrome.tabs.create({url:url});
+				}
+
+				chrome.storage.local.set({ "AmazonURLS" : newData });
 				
 				// Tell popup.html about this great new deal!
 				//magic here
@@ -235,44 +248,3 @@ chrome.extension.onConnect.addListener(function(port){
 	});
 
 });
-
-
-
-
-
-
-
-
-
-
-
-// ATTEMPT to get url of a given tab.  Duplication issue
-
-/*
-chrome.tabs.onUpdated.addListener(function(){
-	getTabUrl();
-});
-
-
-
-function getTabUrl(){
-
-	//get url of tab
-	chrome.tabs.query({lastFocusedWindow: true, active: true}, function(tabs){
-		
-		console.log(tabs[0].url);
-		if (tabs[0].url.startsWith("https://www.amazon.com/gp/product/")){
-			notifications += 1
-			chrome.browserAction.setBadgeText({text: String(notifications)});
-
-		}
-	});
-}
-*/
-
-
-	/* test get url from tab
-	chrome.tabs.getCurrent(function(tab){
-	console.log(tab.url);
-	});
-	*/
