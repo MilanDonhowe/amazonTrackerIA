@@ -1,0 +1,13 @@
+Things that should be done before uploading criterion c:
+
+* Polish code.  delete unused commented lines, etc.
+
+* Make icon that is good.  Maybe outsource?
+
+* Finish Record of Tasks
+
+* Update UI.  Possibly update stuff.
+
+* Add a function to intermentently check amazon product price.  Check on startup?
+
+
