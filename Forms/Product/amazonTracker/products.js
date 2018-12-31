@@ -13,7 +13,7 @@ window.onload = function(){
 
     //var table = Document.createElement('p');
 
-    chrome.storage.local.get({"AmazonURLS": []}, function(data){
+    chrome.storage.sync.get({"AmazonURLS": []}, function(data){
         
         for ( let i in Object.keys(data.AmazonURLS) ){
         
@@ -48,7 +48,7 @@ window.onload = function(){
                     // remove from storage with url name
                     
                     
-                    chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+                    chrome.storage.sync.get({"AmazonURLS": {}}, function(data){
                         
 
                         //console.log(Object.keys(data.AmazonURLS));
@@ -60,7 +60,7 @@ window.onload = function(){
                         }
 
                         let newData = data.AmazonURLS;
-                        chrome.storage.local.set({"AmazonURLS":newData});
+                        chrome.storage.sync.set({"AmazonURLS":newData});
 
                     });
 

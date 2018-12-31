@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	// test save urls
 	
-	chrome.storage.local.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
+	chrome.storage.sync.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
 		loadUrls();
 	});
 	
@@ -78,7 +78,7 @@ function saveNew(test){
 	// {"urlhere": "18.95"}
 	// only one at a time for now
 
-	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+	chrome.storage.sync.get({"AmazonURLS": {}}, function(data){
 		
 		console.log(Object.keys(data.AmazonURLS));
 
@@ -105,7 +105,7 @@ function saveNew(test){
 			
 				// add the new value to data
 				newData[key] = value;
-				chrome.storage.local.set({"AmazonURLS": newData});
+				chrome.storage.sync.set({"AmazonURLS": newData});
 				
 			}
 		}
@@ -116,7 +116,7 @@ function saveNew(test){
 // compares old amazon price with the new amazon price and then saves new price if it is lower.
 function comparePrice(url, newPrice){
 
-	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+	chrome.storage.sync.get({"AmazonURLS": {}}, function(data){
 		
 		if (url in data.AmazonURLS){
 			// make saved price a float
@@ -139,11 +139,11 @@ function comparePrice(url, newPrice){
 					chrome.tabs.create({url:url});
 				}
 
-				chrome.storage.local.set({ "AmazonURLS" : newData });
+				chrome.storage.sync.set({ "AmazonURLS" : newData });
 				
 				
 				// check that save worked
-				chrome.storage.local.get({"AmazonURLS": {}}, function(data){
+				chrome.storage.sync.get({"AmazonURLS": {}}, function(data){
 					console.log(data.AmazonURLS);
 				});
 				
@@ -171,7 +171,7 @@ function comparePrice(url, newPrice){
 // Load saved urls
 
 function loadUrls(){
-	chrome.storage.local.get({"AmazonURLS": []}, function(data){
+	chrome.storage.sync.get({"AmazonURLS": []}, function(data){
 		let keyLength = Object.keys(data.AmazonURLS).length;
 		console.log(data.AmazonURLS); 
 		// loop through array
@@ -206,10 +206,10 @@ chrome.extension.onConnect.addListener(function(port){
 				
 					// do stuff with this new data
 					if (tabURL.startsWith("https://www.amazon.com/")){
-						console.log("It is a go bois");
+						console.log("Amazon Link Recieved.");
 						scrapePage(tabURL);
 					} else {
-						console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
+						console.log("NON-AMAZON LINK.");
 						// return err msg;
 						alert("Sorry this is a non-amazon page so I can't track this product.")
 						port.postMessage("NONAMAZON");
