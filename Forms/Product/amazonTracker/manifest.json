@@ -9,12 +9,12 @@
 	},
 	"browser_action": {
 		"default_popup": "popup.html",
-		"default_title": "Track a product!"
+		"default_title": "Track Amazon Products!"
 	},
 	"icons": {
-		"32": "images/logo32.png",
-		"48": "images/logo48.png",
-		"128": "images/logo128.png"
+		"32": "images/logoA32.png",
+		"48": "images/logoA48.png",
+		"128": "images/logoA128.png"
 	},
 	"permissions": [
 		"storage",

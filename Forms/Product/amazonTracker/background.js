@@ -14,17 +14,7 @@ chrome.runtime.onInstalled.addListener(function() {
 		loadUrls();
 	});
 	
-
-	//saveNew({"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":""});
-
-	//saveNew({"test":"34.2"})
-	//reset badge text
 	chrome.browserAction.setBadgeText({text: ""});
-
-	// test scrape amazon page
-	
-	//scrapePage("https://www.amazon.com/dp/B07GHB4KG6/ref=sxts_kp_bs_tr_lp_1?pf_rd_m=ATVPDKIKX0DER&pf_rd_p=8778bc68-27e7-403f-8460-de48b6e788fb&pd_rd_wg=yX6Y2&pf_rd_r=J2X9QVBGM4D2ZNK6XC99&pf_rd_s=desktop-sx-top-slot&pf_rd_t=301&pd_rd_i=B07GHB4KG6&pd_rd_w=6thB7&pf_rd_i=ak47&pd_rd_r=ac861a9a-c37c-4114-86c6-c132fc650836&ie=UTF8&qid=1540483753&sr=1")
-	//scrapePage("https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C");
 
 	
 });
@@ -54,14 +44,19 @@ function scrapePage(url){
 				let htmlDoc = parser.parseFromString(xhttp.responseText, "text/html");
 				
 				// For book listings there are multiple prices.
-				//price = htmlDoc.getElementsByClassName('a-size-base a-color-price a-color-price')[0].innerHTML;
 				let price = ""
 				try {
 					price = htmlDoc.getElementById('priceblock_ourprice').innerHTML;
 				}
 				catch(err) {
-					price = htmlDoc.getElementById('priceblock_dealprice').innerHTML;
+					try{
+						price = htmlDoc.getElementById('priceblock_dealprice').innerHTML;
+					}
+					catch(err){
+						alert('Sorry I couldn\'t find the price of this product. :C');
+					}
 				}
+
 				
 				//remove any dollar signs ($) that may mess with parsing the string to a float.
 				let formatPrice = price.replace("$", "");
@@ -71,10 +66,6 @@ function scrapePage(url){
 				// save new price.
 				saveNew({[url]:formatPrice});
 				
-
-				//console.log(price.trim());
-				//console.log(htmlDoc.getElementsByClassName('gravatar-wrapper-32')[0].getElementsByTagName('img')[0].src);
-				//console.log(xhttp.responseText);
 			}
 		};
 	xhttp.open("GET", url, true);
@@ -119,13 +110,6 @@ function saveNew(test){
 			}
 		}
 
-
-
-		
-		
-		// comparePrice test
-		//comparePrice("test", "6.04");
-
 	});
 }
 
@@ -133,11 +117,6 @@ function saveNew(test){
 function comparePrice(url, newPrice){
 
 	chrome.storage.local.get({"AmazonURLS": {}}, function(data){
-
-		// check if there is a saved price for that url
-		//if(Object.keys(data.AmazonURLS).includes(url)){
-		//console.log("This is " + url);
-		//console.log("This is " + data.AmazonURLS[url]);
 		
 		if (url in data.AmazonURLS){
 			// make saved price a float
@@ -162,8 +141,6 @@ function comparePrice(url, newPrice){
 
 				chrome.storage.local.set({ "AmazonURLS" : newData });
 				
-				// Tell popup.html about this great new deal!
-				//magic here
 				
 				// check that save worked
 				chrome.storage.local.get({"AmazonURLS": {}}, function(data){
@@ -203,7 +180,7 @@ function loadUrls(){
 			scrapePage(key);
 		}
 
-	})
+	});
 }
 
 
@@ -234,16 +211,13 @@ chrome.extension.onConnect.addListener(function(port){
 					} else {
 						console.log("NON AMAZON LINK.  FiLtHy PeAsEnTs");
 						// return err msg;
+						alert("Sorry this is a non-amazon page so I can't track this product.")
 						port.postMessage("NONAMAZON");
 					}
 				}	
 			});
 
 			
-			
-
-
-
 		}
 	});
 
