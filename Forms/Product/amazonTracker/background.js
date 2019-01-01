@@ -53,7 +53,7 @@ function scrapePage(url){
 						price = htmlDoc.getElementById('priceblock_dealprice').innerHTML;
 					}
 					catch(err){
-						alert('Sorry I couldn\'t find the price of this product. :C');
+						alert('Sorry I couldn\'t find the price of this product.');
 					}
 				}
 
@@ -186,14 +186,13 @@ function loadUrls(){
 
 
 
-// GET THAT GOOD URL EYYY
+// GRAB TAB URL
 chrome.extension.onConnect.addListener(function(port){
-	console.log("CONNECTED TO MAIN FRAME.  EPIC CODE NOW PROCESSING.");
+	console.log("Message recieved.  Sending response.");
 
 	port.onMessage.addListener(function(msg){
 		if (msg == "TABURL"){
 
-			// why do I do this .___.
 
 			// initialize variable to hold the url in this context
 			let tabURL = "";
