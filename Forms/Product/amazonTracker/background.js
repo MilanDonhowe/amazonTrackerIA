@@ -171,7 +171,7 @@ function comparePrice(url, newPrice){
 // Load saved urls
 
 function loadUrls(){
-	chrome.storage.sync.get({"AmazonURLS": []}, function(data){
+	chrome.storage.sync.get({"AmazonURLS": {}}, function(data){
 		let keyLength = Object.keys(data.AmazonURLS).length;
 		console.log(data.AmazonURLS); 
 		// loop through array
