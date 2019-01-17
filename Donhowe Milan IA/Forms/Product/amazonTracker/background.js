@@ -10,9 +10,9 @@ chrome.runtime.onInstalled.addListener(function() {
 
 	// test save urls
 	
-	chrome.storage.sync.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
-		loadUrls();
-	});
+	//chrome.storage.sync.set({"AmazonURLS": {"https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=zg_bs_electronics_home_3?_encoding=UTF8&psc=1&refRID=B2NH4HN9QXK5K1D9KW8C":"4.43"}}, function(data){
+	//	loadUrls();
+	//});
 	
 	chrome.browserAction.setBadgeText({text: ""});
 

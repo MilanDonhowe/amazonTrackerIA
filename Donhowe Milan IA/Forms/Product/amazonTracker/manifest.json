@@ -1,6 +1,7 @@
 {
 	"name": "Amazon Price Tracker",
-	"version": "1.0",
+	"short_name": "amazonWatch",
+	"version": "1.2",
 	"description": "Tracks Amazon Product Prices",
 	"manifest_version": 2,
 	"background": {
@@ -18,7 +19,6 @@
 	},
 	"permissions": [
 		"storage",
-		"tabs",
-		"<all_urls>"
+		"https://www.amazon.com/*"
 	]
 }
