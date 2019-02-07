@@ -1,2 +1,3 @@
 * test with throwawey accnt
 * finish video/audio at home
+* video format must be .avi or .wmv
