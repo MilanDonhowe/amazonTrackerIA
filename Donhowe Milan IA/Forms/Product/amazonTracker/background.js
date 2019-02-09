@@ -202,12 +202,12 @@ chrome.extension.onConnect.addListener(function(port){
 				if(tabs[0].url != undefined){
 					console.log(tabs[0].url);
 					tabURL = tabs[0].url;
-				
 					// do stuff with this new data
 					if (tabURL.startsWith("https://www.amazon.com/")){
 						console.log("Amazon Link Recieved.");
 						scrapePage(tabURL);
-					} else {
+					}
+					else {
 						console.log("NON-AMAZON LINK.");
 						// return err msg;
 						alert("Sorry this is a non-amazon page so I can't track this product.")
