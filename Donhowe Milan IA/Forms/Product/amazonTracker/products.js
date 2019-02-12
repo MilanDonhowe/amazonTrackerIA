@@ -31,7 +31,7 @@ window.onload = function(){
         }
 
 
-        //add event listeners to delete them!
+        //add event listeners to delete listings!
 
 
         let listRows = document.getElementsByClassName('del');
