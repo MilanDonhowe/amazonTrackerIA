@@ -1,0 +1,30 @@
+==============================
+========= tasks file =========
+==============================
+=========== legend ===========
+==============================
+=   * thing to modify ========
+=   + thing to add    ========
+=   - thing to remove ========
+=   ? thing being considered==
+==============================
+
+HIGH PRIORITY:
++ configure proper build script
++ create test script
+
+MEDIUM PRIORITY:
+* move from xmlhttp to fetch api 
+* "modernize" javascript with es6
+
+LOW PRIORITY:
+* redesign styles
++ add documentation
++ add license (research needed)
+
+FUTURE:
+? Move to css preprocessor
+? Move to typescript
+? Create firefox branch
+? Create Electron app
+? Add multiple site support

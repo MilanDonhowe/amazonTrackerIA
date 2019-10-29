@@ -1,0 +1,28 @@
+{
+  "name": "amazontracker",
+  "version": "1.0.0",
+  "description": "A chrome extension for price tracking",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MilanDonhowe/amazonTrackerIA.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "javascript",
+    "html5"
+  ],
+  "author": "Milan Donhowe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MilanDonhowe/amazonTrackerIA/issues"
+  },
+  "homepage": "https://github.com/MilanDonhowe/amazonTrackerIA#readme",
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "should": "^13.2.3"
+  }
+}
