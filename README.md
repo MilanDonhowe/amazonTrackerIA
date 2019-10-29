@@ -1,2 +1,2 @@
-# amazonTrackerIA
-My computer science IA
+# Amazon Price Tracker
+A browser extension for smarter shopping.
