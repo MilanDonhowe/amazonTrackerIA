@@ -5,15 +5,13 @@
 ====== By Milan Donhowe ======
 ==============================
 */
-
 'use strict';
 
 let notifications = 0;
 
-// run code on install/reload
 chrome.runtime.onInstalled.addListener(function() {
 
-	console.log(' background.js loaded');
+	console.log("background.js loaded");
 
 
 	// test save urls
@@ -37,10 +35,39 @@ chrome.runtime.onStartup.addListener(function(){
 
 
 // Notes:
-// the id priceblock_ourprice outputs the main price of a page.  However this seems to vary for book listings which have multiple purchase options.  Maybe figure out how to test difference or just ignore books?
+// the id priceblock_ourprice outputs the main price of a page.  
+// However this seems to vary for book listings which have multiple purchase options.  Maybe figure out how to test difference or just ignore books?
 
 
 // Scrapes the price of an amazon price product when given a url
+function scrapePage(url){
+
+    let request = fetch(url)
+    .then(function(res){
+
+        let parser = new DOMParser();
+        let htmlDoc = parser.parseFromString(res.text(), "text/html");
+        let price = null;
+
+        // trial and error to find listed price
+        const possibleIds = ["priceblock_ourprice", "priceblock_dealprice"];
+        for(let i=0; i < possibleIds.length; i++){
+            price = document.getElementById(possibleIds[i]);
+            if (price != null) break;
+        }
+
+        let formatPrice = price.replace("$", "");
+        console.log(formatPrice);
+        console.log("Price found: " + price.replace("$", ""));
+		// save new price.
+		saveNew({[url]:formatPrice});
+
+    })
+    .catch(resp => {
+        console.log("error: network failure!");
+    });
+}       
+/*
 function scrapePage(url){
 
 	var xhttp = new XMLHttpRequest();
@@ -79,7 +106,7 @@ function scrapePage(url){
 	xhttp.open("GET", url, true);
 	xhttp.send();
 }
-
+*/
 
 // example amazon urls for testing purposes
 function saveNew(test){

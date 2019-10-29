@@ -1,0 +1,49 @@
+<!-- test modular scripts -->
+
+<script>
+// Get Amazon Price
+
+function attempt(command){
+    try {
+        command;
+    } catch {
+        return false;
+    }
+}
+
+
+
+
+scrapePage("https://www.amazon.com/VicTsing-Wireless-Portable-Receiver-Adjustable/dp/B013WC0P2A");
+
+
+function scrapePage(url){
+
+    let request = fetch(url)
+    .then(function(res){
+
+        let parser = new DOMParser();
+        let htmlDoc = parser.parseFromString(res.text(), "text/html");
+        let price = null;
+
+        // trial and error to find listed price
+        const possibleIds = ["priceblock_ourprice", "priceblock_dealprice"];
+        for(let i=0; i < possibleIds.length; i++){
+            price = document.getElementById(possibleIds[i]);
+            if (price != null) break;
+        }
+
+        let formatPrice = price.replace("$", "");
+        console.log(formatPrice);
+        console.log("Price found: " + price.replace("$", ""));
+		// save new price.
+		saveNew({[url]:formatPrice});
+
+    })
+    .catch(resp => {
+        console.log("error: network failure!");
+    });
+}       
+
+
+</script>

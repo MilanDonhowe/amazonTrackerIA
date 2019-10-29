@@ -18,6 +18,7 @@ MEDIUM PRIORITY:
 * "modernize" javascript with es6
 
 LOW PRIORITY:
++ add visible error messaeg
 * redesign styles
 + add documentation
 + add license (research needed)
